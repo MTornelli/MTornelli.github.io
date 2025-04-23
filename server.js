@@ -1,6 +1,7 @@
-import express from 'express';
-import dotenv from 'dotenv';
-import { Configuration, OpenAIApi } from 'openai';
+const express = require('express');
+const dotenv = require('dotenv');
+const { Configuration, OpenAIApi } = require('openai');
+const path = require('path');
 
 dotenv.config();
 const app = express();
@@ -11,7 +12,7 @@ const openai = new OpenAIApi(new Configuration({
 }));
 
 app.use(express.json());
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.post('/api/chat', async (req, res) => {
   const { message } = req.body;
@@ -23,7 +24,7 @@ app.post('/api/chat', async (req, res) => {
     });
     res.json(completion.data.choices[0].message.content);
   } catch (error) {
-    console.error(error);
+    console.error(error.response?.data || error.message);
     res.status(500).send('Error communicating with OpenAI');
   }
 });
