@@ -19,9 +19,10 @@ app.post('/api/chat', async (req, res) => {
 
   try {
     const completion = await openai.chat.completions.create({
-      model: 'gpt-4',
-      messages: [{ role: 'user', content: message }],
-    });
+  model: 'gpt-3.5-turbo',
+  messages: [{ role: 'user', content: message }],
+});
+
     res.json(completion.choices[0].message.content);
   } catch (error) {
     console.error(error.response?.data || error.message);
